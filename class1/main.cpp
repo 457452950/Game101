@@ -11,13 +11,39 @@ Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
     Eigen::Matrix4f view = Eigen::Matrix4f::Identity();
 
     Eigen::Matrix4f translate;
-    translate << 1, 0, 0, -eye_pos[0], 0, 1, 0, -eye_pos[1], 0, 0, 1,
-        -eye_pos[2], 0, 0, 0, 1;
+    translate << 1, 0, 0, -eye_pos[0],
+                 0, 1, 0, -eye_pos[1],
+                 0, 0, 1, -eye_pos[2],
+                 0, 0, 0, 1;
 
     view = translate * view;
 
     return view;
 }
+
+Eigen::Matrix4f get_rotation(Vector3f axis, float angle) {
+    Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
+
+    auto nomal_axis = axis.normalized();
+
+    auto ra = angle * MY_PI / 180;
+
+    auto c = cos(ra);
+    auto s = sin(ra);
+
+    auto u = axis[0];
+    auto v = axis[1];
+    auto w = axis[2];
+
+    model << u * u + (1 - u * u) * c, u * v * (1 - c) - w * s, u * w * (1 - c) + v * s, 0,
+             u * v * (1 - c) + w * s, v * v + (1 - v * v) * c, v * w * (1 - c) - u * s, 0,
+             u * w * (1 - c) - v * s, v * w * (1 - c) + u * s, w * w + (1 - w * w) * c, 0,
+             0,                       0,                       0,                       1;
+
+    return model;
+}
+
+#define y
 
 Eigen::Matrix4f get_model_matrix(float rotation_angle)
 {
@@ -27,15 +53,7 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
     // Create the model matrix for rotating the triangle around the Z axis.
     // Then return it.
 
-    auto ra = rotation_angle * MY_PI / 180;
-
-    auto c = cos(ra);
-    auto s = sin(ra);
-
-    model << c, -s, 0, 0,
-             s, c, 0, 0,
-             0, 0, 1, 0,
-             0, 0, 0, 1;
+    model = get_rotation(Vector3f(0, 0, 1), rotation_angle);
 
     return model;
 }
@@ -84,7 +102,7 @@ int main(int argc, const char** argv)
 
     rst::rasterizer r(700, 700);
 
-    Eigen::Vector3f eye_pos = {0, 0, 5};
+    Eigen::Vector3f eye_pos = {0, 0, 15};
 
     std::vector<Eigen::Vector3f> pos{{2, 0, -2}, {0, 2, -2}, {-2, 0, -2}};
 
@@ -129,10 +147,10 @@ int main(int argc, const char** argv)
         std::cout << "frame count: " << frame_count++ << '\n';
 
         if (key == 'a') {
-            angle += 1;
+            angle += 2;
         }
         else if (key == 'd') {
-            angle -= 1;
+            angle -= 2;
         }
     }
 
