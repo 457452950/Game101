@@ -1,0 +1,19 @@
+{
+  "name": "sdlpp",
+  "version-semver": "1.0.0",
+  "dependencies": [
+    {
+      "name": "opencv",
+      "features": ["world"]
+    },
+    {
+      "name": "eigen3"
+    },
+    {
+        "name": "fmt"
+    }
+  ],
+  "builtin-baseline": "57fee154cc4068542740b4b5775343d9fd83413e",
+  "overrides": [
+  ]
+}
