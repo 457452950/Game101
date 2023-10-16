@@ -6,15 +6,16 @@
 
 constexpr double MY_PI = 3.1415926;
 
-Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
-{
+Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos) {
     Eigen::Matrix4f view = Eigen::Matrix4f::Identity();
 
     Eigen::Matrix4f translate;
-    translate << 1, 0, 0, -eye_pos[0],
-                 0, 1, 0, -eye_pos[1],
-                 0, 0, 1, -eye_pos[2],
-                 0, 0, 0, 1;
+    // clang-format off
+    translate <<    1, 0, 0, -eye_pos[0],
+                    0, 1, 0, -eye_pos[1],
+                    0, 0, 1, -eye_pos[2],
+                    0, 0, 0, 1;
+    // clang-format on
 
     view = translate * view;
 
@@ -35,18 +36,19 @@ Eigen::Matrix4f get_rotation(Vector3f axis, float angle) {
     auto v = axis[1];
     auto w = axis[2];
 
-    model << u * u + (1 - u * u) * c, u * v * (1 - c) - w * s, u * w * (1 - c) + v * s, 0,
-             u * v * (1 - c) + w * s, v * v + (1 - v * v) * c, v * w * (1 - c) - u * s, 0,
-             u * w * (1 - c) - v * s, v * w * (1 - c) + u * s, w * w + (1 - w * w) * c, 0,
-             0,                       0,                       0,                       1;
+    // clang-format off
+    model <<    u * u + (1 - u * u) * c, u * v * (1 - c) - w * s, u * w * (1 - c) + v * s, 0,
+                u * v * (1 - c) + w * s, v * v + (1 - v * v) * c, v * w * (1 - c) - u * s, 0,
+                u * w * (1 - c) - v * s, v * w * (1 - c) + u * s, w * w + (1 - w * w) * c, 0,
+                0,                       0,                       0,                       1;
+    // clang-format on
 
     return model;
 }
 
 #define y
 
-Eigen::Matrix4f get_model_matrix(float rotation_angle)
-{
+Eigen::Matrix4f get_model_matrix(float rotation_angle) {
     Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
 
     // TODO: Implement this function
@@ -58,9 +60,7 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
     return model;
 }
 
-Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
-                                      float zNear, float zFar)
-{
+Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float zNear, float zFar) {
     // Students will implement this function
 
     Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
@@ -76,24 +76,25 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
     float c = -1 * (zFar + zNear) / (zFar - zNear);
     float d = -1 * (2 * zNear * zFar) / (zFar - zNear);
 
-    projection << a, 0, 0, 0,
-                  0, b, 0, 0,
-                  0, 0, c, d,
-                  0, 0, -1, 0;
+    // clang-format off
+    projection <<   a, 0, 0, 0,
+                    0, b, 0, 0,
+                    0, 0, c, d,
+                    0, 0, -1, 0;
+    // clang-format on
 
     return projection;
 }
 
-int main(int argc, const char** argv)
-{
-    float angle = 0;
-    bool command_line = false;
-    std::string filename = "output.png";
+int main(int argc, const char **argv) {
+    float       angle        = 0;
+    bool        command_line = false;
+    std::string filename     = "output.png";
 
-    if (argc >= 3) {
+    if(argc >= 3) {
         command_line = true;
-        angle = std::stof(argv[2]); // -r by default
-        if (argc == 4) {
+        angle        = std::stof(argv[2]); // -r by default
+        if(argc == 4) {
             filename = std::string(argv[3]);
         }
     }
@@ -109,10 +110,10 @@ int main(int argc, const char** argv)
     auto pos_id = r.load_positions(pos);
     auto ind_id = r.load_indices(ind);
 
-    int key = 0;
+    int key         = 0;
     int frame_count = 0;
 
-    if (command_line) {
+    if(command_line) {
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
         r.set_model(get_model_matrix(angle));
@@ -128,7 +129,7 @@ int main(int argc, const char** argv)
         return 0;
     }
 
-    while (key != 27) {
+    while(key != 27) {
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
         r.set_model(get_model_matrix(angle));
@@ -144,10 +145,9 @@ int main(int argc, const char** argv)
 
         std::cout << "frame count: " << frame_count++ << '\n';
 
-        if (key == 'a') {
+        if(key == 'a') {
             angle += 2;
-        }
-        else if (key == 'd') {
+        } else if(key == 'd') {
             angle -= 2;
         }
     }
