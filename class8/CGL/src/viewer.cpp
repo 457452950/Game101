@@ -6,7 +6,6 @@
 #include <iostream>
 #include <algorithm>
 
-#define GLEW_STATIC
 #include "GL/glew.h"
 
 #include "console.h"

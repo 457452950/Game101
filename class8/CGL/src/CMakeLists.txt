@@ -119,6 +119,7 @@ endif (LINUX)
 # Build on Windows #
 ####################
 if (WIN32)
+    add_definitions(-DGLEW_STATIC)
 
     if (MSVC)
         if (CGL_BUILD_DEBUG)
