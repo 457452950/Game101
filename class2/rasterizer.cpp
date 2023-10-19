@@ -135,14 +135,22 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t) {
     int y_e = std::max(v[0].y(), std::max(v[1].y(), v[2].y()));
 
     for(int x = x_s; x <= x_e; ++x) {
+        if(x < 0 || x >= width) {
+            continue;
+        }
+
         int flag = 0;
         for(int y = y_s; y <= y_e; ++y) {
+            if(y < 0 || y >= height) {
+                continue;
+            }
+
             auto inside = insideTriangle(x + 0.5, y + 0.5, t.v);
 
             if(inside) {
                 // If so, use the following code to get the interpolated z value.
                 auto [alpha, beta, gamma] = computeBarycentric2D(x, y, t.v);
-                float w_reciprocal        = 1.0 / (alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());
+                float w_reciprocal        = 1.0f / (alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());
                 float z_interpolated =
                         alpha * v[0].z() / v[0].w() + beta * v[1].z() / v[1].w() + gamma * v[2].z() / v[2].w();
                 z_interpolated *= w_reciprocal;
