@@ -4,13 +4,18 @@
   "dependencies": [
     {
       "name": "opencv",
-      "features": ["world"]
+      "features": [
+        "world"
+      ]
     },
     {
       "name": "eigen3"
     },
     {
-        "name": "fmt"
+      "name": "fmt"
+    },
+    {
+      "name": "freetype"
     }
   ],
   "builtin-baseline": "57fee154cc4068542740b4b5775343d9fd83413e",
