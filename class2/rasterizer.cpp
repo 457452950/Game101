@@ -135,6 +135,7 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t) {
     int y_e = std::max(v[0].y(), std::max(v[1].y(), v[2].y()));
 
     for(int x = x_s; x <= x_e; ++x) {
+        int flag = 0;
         for(int y = y_s; y <= y_e; ++y) {
             auto inside = insideTriangle(x + 0.5, y + 0.5, t.v);
 
@@ -154,6 +155,10 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t) {
                 // TODO : set the current pixel (use the set_pixel function) to the color of the triangle (use getColor
                 // function) if it should be painted.
                 set_pixel({float(x), float(y), 0}, t.getColor());
+                flag = 1;
+            } else {
+                if(flag == 1)
+                    break;
             }
         }
     }
