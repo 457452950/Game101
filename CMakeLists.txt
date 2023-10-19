@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.26)
+cmake_minimum_required(VERSION 3.20)
 project(game101)
 
 set(VCPKG_FEATURE_FLAGS "version")          # 用于支持自定义依赖版本

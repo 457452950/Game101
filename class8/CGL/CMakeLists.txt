@@ -1,7 +1,7 @@
 # Original file Copyright CMU462 Fall 2015:
 # Kayvon Fatahalian, Keenan Crane,
 # Sky Gao, Bryce Summers, Michael Choquette.
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.20)
 project(CGL)
 
 #-------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ endif (APPLE)
 # Build on Linux #
 ##################
 #set(LINUX UNIX AND NOT APPLE)
-if (LINUX)
+if (UNIX AND NOT APPLE)
 
     # GCC only
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -120,7 +120,7 @@ if (LINUX)
 
     endif ()
 
-endif (LINUX)
+endif (UNIX AND NOT APPLE)
 
 ####################
 # Build on Windows #
